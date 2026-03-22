@@ -1,5 +1,9 @@
 # team-up
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](.claude-plugin/marketplace.json)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-blueviolet.svg)](https://docs.anthropic.com/en/docs/claude-code)
+
 A Claude Code plugin that orchestrates persistent agent teams. Give it a task, and it assembles a team of specialist agents — spec writers, engineers, reviewers, researchers — coordinates their work through a structured pipeline, and delivers reviewed, tested code.
 
 ## Why
@@ -126,6 +130,10 @@ The lead will discover and use any agent definitions it finds.
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
 - The `TeamCreate` and `Agent` tools (available in Claude Code)
+
+## Acknowledgments
+
+The workflow and agent coordination patterns in this plugin are inspired by [superpowers](https://github.com/obra/superpowers) by Jesse Vincent, which introduced structured skill-based workflows for Claude Code — brainstorming, TDD, plan writing, code review, and more. team-up builds on those ideas by turning them into a multi-agent team with persistent specialist roles.
 
 ## License
 
