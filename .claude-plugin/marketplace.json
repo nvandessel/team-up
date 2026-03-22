@@ -1,0 +1,30 @@
+{
+  "name": "team-up",
+  "owner": {
+    "name": "nic"
+  },
+  "metadata": {
+    "description": "Team lead playbook for orchestrating persistent agent teams",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "team-up",
+      "description": "Orchestrate persistent agent teams with TeamCreate — assess, propose, assemble, coordinate, and deliver with specialist agents",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/team-up"
+      ],
+      "agents": [
+        "./agents/spec-writer.md",
+        "./agents/spec-reviewer.md",
+        "./agents/plan-writer.md",
+        "./agents/plan-reviewer.md",
+        "./agents/researcher.md",
+        "./agents/engineer.md",
+        "./agents/qa-reviewer.md"
+      ]
+    }
+  ]
+}
