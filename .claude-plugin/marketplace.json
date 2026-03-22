@@ -1,11 +1,12 @@
 {
   "name": "team-up",
   "owner": {
-    "name": "nic"
+    "name": "Nic van Dessel",
+    "email": "51134175+nvandessel@users.noreply.github.com"
   },
   "metadata": {
     "description": "Team lead playbook for orchestrating persistent agent teams",
-    "version": "0.1.0"
+    "version": "1.0.0"
   },
   "plugins": [
     {
