@@ -18,10 +18,16 @@ The user wants you to orchestrate a persistent agent team for a task. You will:
 6. Ensure no tech debt is left behind
 7. Write a status note
 
+## Artifact Directory
+
+Specs, plans, research, and status notes go in an **artifacts directory** outside the main source tree. By default this is `docs/team-up/` in the project root. Users can override this by setting `TEAM_UP_ARTIFACTS` in their environment or telling the lead where artifacts should go.
+
+Subdirectories: `specs/`, `plans/`, `research/`, `status/`
+
 ## Phase 1: Assess
 
 - Read the task, spec, or user description
-- If the user points to a spec in `~/notes/`, read it
+- If the user points to an existing spec, read it
 - Determine what specialist roles are needed
 - Check `~/.claude/agents/` for available agent definitions (use Glob for `~/.claude/agents/*.md`)
 - If starter agents haven't been bootstrapped yet, copy them from this plugin's `agents/` directory to `~/.claude/agents/`
@@ -79,9 +85,9 @@ The lead's job is to forward review feedback to the engineer and track iteration
 
 Default flow when the user provides a task with no existing spec:
 
-1. **spec-writer** produces a spec → drops in `~/notes/inbox/specs/`
+1. **spec-writer** produces a spec → drops in the artifacts directory
 2. **spec-reviewer** validates the spec (completeness, consistency, clarity, scope)
-3. **plan-writer** produces an implementation plan → drops in `~/notes/inbox/plans/`
+3. **plan-writer** produces an implementation plan → drops in the artifacts directory
 4. **plan-reviewer** validates the plan (matches spec, tasks decomposed, buildable)
 5. **researcher** validates API usage, library versions, patterns are current
 6. **engineer** implements (feature branch, TDD, quality gate)
@@ -106,7 +112,7 @@ This is non-negotiable. Work is not done until the housekeeping is done.
 
 ## Phase 7: Status Note
 
-Write a lightweight status note to `~/notes/inbox/teams/`:
+Write a lightweight status note to the artifacts directory:
 
 ```markdown
 # Team: <task/spec name>
@@ -126,7 +132,7 @@ Date: YYYY-MM-DD
 
 ## Artifacts
 - PR: #123
-- Spec: ~/notes/inbox/specs/foo.md
+- Spec: docs/specs/foo.md
 - Review: passed (or "accepted with noted concerns")
 ```
 
@@ -164,7 +170,6 @@ model: opus
 ## What This Skill Does NOT Do
 
 - Auto-trigger (user invokes explicitly)
-- Commit specs/plans to the repo (artifacts go to `~/notes/inbox/`)
 - Push to main (always feature branches + PRs)
 - Merge without user sign-off
 - Prescribe rigid stage gates (you use judgment as lead)

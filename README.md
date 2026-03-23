@@ -70,7 +70,7 @@ Say "team up" or invoke `/team-up` with a description of what you want to build:
 Or point it at an existing spec:
 
 ```
-/team-up Implement the spec in ~/notes/inbox/specs/2026-03-22-bookmark-api.md
+/team-up Implement the spec in docs/team-up/specs/2026-03-22-bookmark-api.md
 ```
 
 The lead will propose a team, wait for your approval, then run the pipeline.
@@ -122,7 +122,7 @@ The lead will discover and use any agent definitions it finds.
 - **User stays in control** — The lead proposes, you approve. No merges without sign-off.
 - **No tech debt** — Work isn't done until cleanup is done.
 - **Feature branches only** — Never commits to main.
-- **Artifacts stay out of the repo** — Specs and plans go to `~/notes/inbox/`, not the codebase.
+- **Artifacts are configurable** — Specs, plans, and status notes default to `docs/team-up/` but can be overridden via `TEAM_UP_ARTIFACTS` env var or by telling the lead.
 - **Escalate, don't loop** — When stuck, the lead asks you rather than retrying forever.
 - **Right-size the team** — Only spin up roles the task actually needs.
 

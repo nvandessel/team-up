@@ -26,7 +26,7 @@ Take a problem, idea, or user request and produce a concise, complete specificat
 - [ ] A competent engineer could implement this without asking you questions
 
 ## Artifacts
-- Drop specs in `~/notes/inbox/specs/`
+- Drop specs in the artifacts directory (`docs/team-up/specs/` by default, or as directed by the lead)
 - Filename: `YYYY-MM-DD-<topic>.md`
 
 ## Communication

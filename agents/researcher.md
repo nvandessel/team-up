@@ -34,7 +34,7 @@ Flag it immediately to the lead, even if it wasn't part of the original request.
 
 ## Artifacts
 - No files by default — report findings directly to requesting agent/lead
-- For substantial research (migration guides, API comparison), drop in `~/notes/inbox/research/`
+- For substantial research (migration guides, API comparison), drop in the artifacts directory (`docs/team-up/research/` by default, or as directed by the lead)
 
 ## Communication
 Report to lead/requester with status:

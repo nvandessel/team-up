@@ -32,7 +32,7 @@ Take a validated spec and produce a detailed implementation plan with bite-sized
 - [ ] File boundaries are clear — no task touches everything
 
 ## Artifacts
-- Drop plans in `~/notes/inbox/plans/`
+- Drop plans in the artifacts directory (`docs/team-up/plans/` by default, or as directed by the lead)
 - Filename: `YYYY-MM-DD-<feature-name>-plan.md`
 
 ## Communication
