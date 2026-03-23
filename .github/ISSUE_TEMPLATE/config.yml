@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/nvandessel/team-up/issues
+    about: For usage questions, open a blank issue with the "question" label — happy to help.

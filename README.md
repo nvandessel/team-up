@@ -3,7 +3,7 @@
 > Early days — feedback and bug reports welcome. [Open an issue](https://github.com/nvandessel/team-up/issues).
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](.claude-plugin/marketplace.json)
+[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](.claude-plugin/marketplace.json)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-blueviolet.svg)](https://docs.anthropic.com/en/docs/claude-code)
 
 > Orchestrate persistent agent teams in Claude Code. Give it a task, and it assembles
