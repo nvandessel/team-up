@@ -1,16 +1,35 @@
 # team-up
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+> Early days — feedback and bug reports welcome. [Open an issue](https://github.com/nvandessel/team-up/issues).
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](.claude-plugin/marketplace.json)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-blueviolet.svg)](https://docs.anthropic.com/en/docs/claude-code)
 
-A Claude Code plugin that orchestrates persistent agent teams. Give it a task, and it assembles a team of specialist agents — spec writers, engineers, reviewers, researchers — coordinates their work through a structured pipeline, and delivers reviewed, tested code.
+> Orchestrate persistent agent teams in Claude Code. Give it a task, and it assembles
+> specialist agents — spec writers, engineers, reviewers, researchers — coordinates their
+> work through a structured pipeline, and delivers reviewed, tested code.
 
-## Why
+---
 
-Running one agent at a time works for small tasks. But for anything that needs a spec, a plan, implementation, and review, you end up doing the coordination yourself. team-up handles that coordination: it reads the task, proposes a team, assembles it, delegates work, manages handoffs, and makes sure nothing falls through the cracks.
+- [Why team-up](#why-team-up)
+- [How it works](#how-it-works)
+- [Agent roles](#agent-roles)
+- [Install](#install) · [Usage](#usage)
+- [Customizing agents](#customizing-agents)
+- [Design principles](#design-principles)
+- [Acknowledgments](#acknowledgments)
 
-## How It Works
+---
+
+## Why team-up
+
+- **Stop being the coordinator** — for anything that needs a spec, a plan, implementation, and review, you end up managing the handoffs yourself. team-up does that for you.
+- **Right-size the team** — a bug fix gets a researcher + engineer. A new feature gets the full pipeline. The lead assembles only what the task needs.
+- **No tech debt left behind** — work isn't done until cleanup is done. Quality gates, docs, and issue tracking are enforced before completion.
+- **You stay in control** — the lead proposes, you approve. No merges without sign-off. When stuck, it asks you rather than looping forever.
+
+## How it works
 
 When you invoke `/team-up`, Claude becomes the team lead and runs a 7-phase workflow:
 
@@ -22,7 +41,7 @@ When you invoke `/team-up`, Claude becomes the team lead and runs a 7-phase work
 6. **Cleanup** — Verify no tech debt, all docs updated, quality gates passed
 7. **Status** — Write a status note tracking what was done
 
-## Agent Roles
+## Agent roles
 
 | Agent | Job |
 |-------|-----|
@@ -36,7 +55,7 @@ When you invoke `/team-up`, Claude becomes the team lead and runs a 7-phase work
 
 Not every task needs every role. The lead assembles only what's needed — a bug fix might just need a researcher + engineer, while a new feature gets the full pipeline.
 
-## Communication Protocol
+### Communication protocol
 
 All agents report status to the lead using structured codes:
 
@@ -45,19 +64,22 @@ All agents report status to the lead using structured codes:
 - **NEEDS_CONTEXT** — Blocked on missing information
 - **BLOCKED** — Stuck, needs intervention
 
-## Installation
-
-### From GitHub
+## Install
 
 ```
 /plugins add nvandessel/team-up
 ```
 
-### From local directory
+Or from a local directory:
 
 ```
 /plugins add /path/to/team-up
 ```
+
+### Requirements
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
+- The `TeamCreate` and `Agent` tools (available in Claude Code)
 
 ## Usage
 
@@ -75,17 +97,13 @@ Or point it at an existing spec:
 
 The lead will propose a team, wait for your approval, then run the pipeline.
 
-## Customizing Agents
+### Artifacts
 
-Agent definitions live in `agents/` as markdown files. Each defines:
+Specs, plans, research, and status notes go in `docs/team-up/` by default (with subdirectories `specs/`, `plans/`, `research/`, `status/`). Override by setting `TEAM_UP_ARTIFACTS` in your environment or just telling the lead where you want them.
 
-- **Role** — What the agent does
-- **Boundaries** — What's in and out of scope
-- **Process** — Step-by-step workflow
-- **Quality standards** — Checklist before reporting done
-- **Communication** — How to report status
+## Customizing agents
 
-To add a custom agent, create a new `.md` file in `agents/` following the same format:
+Agent definitions live in `agents/` as markdown files. To add a custom agent, create a new `.md` file following the same format:
 
 ```markdown
 ---
@@ -117,19 +135,13 @@ What this agent does.
 
 The lead will discover and use any agent definitions it finds.
 
-## Design Principles
+## Design principles
 
 - **User stays in control** — The lead proposes, you approve. No merges without sign-off.
 - **No tech debt** — Work isn't done until cleanup is done.
 - **Feature branches only** — Never commits to main.
-- **Artifacts are configurable** — Specs, plans, and status notes default to `docs/team-up/` but can be overridden via `TEAM_UP_ARTIFACTS` env var or by telling the lead.
 - **Escalate, don't loop** — When stuck, the lead asks you rather than retrying forever.
 - **Right-size the team** — Only spin up roles the task actually needs.
-
-## Requirements
-
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
-- The `TeamCreate` and `Agent` tools (available in Claude Code)
 
 ## Acknowledgments
 

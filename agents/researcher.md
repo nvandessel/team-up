@@ -41,3 +41,4 @@ Report to lead/requester with status:
 - **DONE** — Research complete, findings: [summary]
 - **DONE_WITH_CONCERNS** — Found what you asked about, but also discovered [related issue]
 - **NEEDS_CONTEXT** — Need more specifics: [what exactly to research]
+- **BLOCKED** — Research blocked because [reason]
