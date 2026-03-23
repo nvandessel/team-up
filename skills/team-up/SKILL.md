@@ -14,7 +14,7 @@ The user wants you to orchestrate a persistent agent team for a task. You will:
 2. Propose a team
 3. Assemble it via TeamCreate + Agent tool
 4. Coordinate work via SendMessage and TaskCreate
-5. Run workflows (Greptile loop, etc.)
+5. Run workflows (review loops, pipelines, etc.)
 6. Ensure no tech debt is left behind
 7. Write a status note
 
@@ -65,18 +65,15 @@ Present the team composition to the user:
 
 ## Phase 5: Workflows
 
-### Greptile Review Loop
+### Code Review Loop
 
-**Dependency:** Requires the `/loop` skill for polling.
+After the engineer pushes a PR, run any available automated review tools:
 
-1. Engineer pushes to PR
-2. Use `/loop` to poll for Greptile review via `gh api repos/{owner}/{repo}/pulls/{pr}/reviews` and PR comments
-3. When review lands: parse the summary comment for the score and inline comments for specific feedback
-4. **5/5** → Done. Surface result to user.
-5. **< 5/5** → Forward inline feedback to engineer. Engineer addresses it, pushes, loop continues.
-6. **4/5 three times in a row** OR reasons are design/out-of-scope → Escalate to user: "Greptile's giving 4/5 because [reason]. Accept or keep iterating?"
-7. **Max 10 iterations** → Mandatory escalation regardless of score.
-8. Any agent waiting on indeterminate external results (CI, Greptile, deploy) should use `/loop` rather than blocking.
+- **Greptile plugin installed?** Use its `/greploop` skill or `trigger_code_review` tool — it handles the full review-fix-rereview cycle natively.
+- **Other review tools?** Use whatever's available. The pattern is the same: trigger review → parse feedback → forward to engineer → repeat until clean.
+- **No automated review?** QA reviewer handles it manually (see agent role above).
+
+The lead's job is to forward review feedback to the engineer and track iterations — not to implement a review tool from scratch.
 
 ### Pipeline: Spec → Plan → Implement → Review
 
@@ -130,7 +127,7 @@ Date: YYYY-MM-DD
 ## Artifacts
 - PR: #123
 - Spec: ~/notes/inbox/specs/foo.md
-- Greptile: 5/5 (or "4/5 accepted — design feedback, out of scope")
+- Review: passed (or "accepted with noted concerns")
 ```
 
 Update at meaningful checkpoints (phase transitions, blockers, completion). Not every micro-step.
