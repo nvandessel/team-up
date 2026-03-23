@@ -66,9 +66,10 @@ All agents report status to the lead using structured codes:
 
 ## Install
 
-```
-/plugins add nvandessel/team-up
-```
+1. Open Claude Code settings
+2. Go to the **Marketplace** tab
+3. Search for **team-up**
+4. Click install
 
 Or from a local directory:
 
