@@ -80,7 +80,7 @@ Or from a local directory:
 ### Requirements
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
-- The `TeamCreate` and `Agent` tools (available in Claude Code)
+- [Agent Teams enabled](https://code.claude.com/docs/en/agent-teams#enable-agent-teams)
 
 ## Usage
 
