@@ -24,7 +24,8 @@
         "./agents/plan-reviewer.md",
         "./agents/researcher.md",
         "./agents/engineer.md",
-        "./agents/qa-reviewer.md"
+        "./agents/qa-reviewer.md",
+        "./agents/debater.md"
       ]
     }
   ]
