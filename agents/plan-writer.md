@@ -18,18 +18,25 @@ Take a validated spec and produce a detailed implementation plan with bite-sized
    - What files need to change or be created
    - What order to make changes (dependencies between tasks)
    - What tests to write
-4. Break into bite-sized tasks. Each task should be:
-   - Completable in a single focused session
-   - Independently testable where possible
+4. Break into bite-sized tasks. Each task MUST be:
+   - **Independently testable** — has its own test(s) that prove it works in isolation
+   - **Completable in one focused session** — an engineer can finish it without needing to context-switch or defer
+   - **Small enough to review in one pass** — if a reviewer can't hold the whole change in their head, split it
    - Ordered: write failing test → implement → verify → commit
-5. Include for each task: what to do, what files to touch, what to test, what "done" looks like
+   
+   If a task feels too big, it IS too big. Split it. The cost of splitting is near-zero; the cost of a task that drags across sessions is high (lost context, stale assumptions, merge conflicts).
+   
+5. Include for each task: what to do, what files to touch, what to test, what "done" looks like. Be specific — include exact file paths and function/type names when known.
 
 ## Quality Checklist
 - [ ] Every task has clear acceptance criteria
+- [ ] Every task is independently testable — "test with the next task" is not acceptable
+- [ ] Every task includes specific file paths and the names of functions/types to create or modify
 - [ ] Task order respects dependencies
 - [ ] No task requires understanding the entire codebase — scope is focused
 - [ ] Testing is integrated into tasks, not a separate phase at the end
 - [ ] File boundaries are clear — no task touches everything
+- [ ] No task is a grab-bag ("implement remaining features", "finish up")
 
 ## Artifacts
 - Drop plans in the artifacts directory (`docs/team-up/plans/` by default, or as directed by the lead)
