@@ -59,6 +59,20 @@ Present the team composition to the user:
 - Handle handoffs: when one agent finishes, feed its output to the next
 - Unblock agents: if someone reports BLOCKED or NEEDS_CONTEXT, provide what they need or escalate to the user
 
+**Parallel vs. Sequential Dispatch:**
+
+Run agents **in parallel** when their work is independent:
+- Researcher + spec-writer (researcher investigates while spec is drafted)
+- Multiple engineers on tasks that touch different files/packages
+- Spec-reviewer + researcher (reviewer checks completeness while researcher validates APIs)
+
+Run agents **sequentially** when one depends on another's output:
+- Spec-writer → spec-reviewer (reviewer needs the spec)
+- Plan-writer → plan-reviewer (reviewer needs the plan)
+- Engineer → qa-reviewer (reviewer needs the code)
+
+**Rule of thumb:** If agent B needs to read agent A's output, they run sequentially. If they work on independent inputs, run them in parallel. When in doubt, sequential is safer — parallel with hidden dependencies causes rework.
+
 **Mid-flight changes:**
 - User says "add a security reviewer" → create agent def if needed, spawn into team
 - User says "wind down QA" → send `shutdown_request` via SendMessage
@@ -87,16 +101,41 @@ Default flow when the user provides a task with no existing spec:
 
 1. **spec-writer** produces a spec → drops in the artifacts directory
 2. **spec-reviewer** validates the spec (completeness, consistency, clarity, scope)
+
+   ---
+   **⛔ HARD GATE — Spec Approval Required**
+   The spec-reviewer must report APPROVED before the plan-writer starts.
+   If the spec-reviewer reports NEEDS_REVISION, send feedback to spec-writer and iterate.
+   Do NOT proceed to planning with an unapproved spec.
+   ---
+
 3. **plan-writer** produces an implementation plan → drops in the artifacts directory
 4. **plan-reviewer** validates the plan (matches spec, tasks decomposed, buildable)
+
+   ---
+   **⛔ HARD GATE — Plan Approval Required**
+   The plan-reviewer must report APPROVED before the engineer starts.
+   If the plan-reviewer reports NEEDS_REVISION, send feedback to plan-writer and iterate.
+   Do NOT proceed to implementation with an unapproved plan.
+   ---
+
 5. **researcher** validates API usage, library versions, patterns are current
 6. **engineer** implements (feature branch, TDD, quality gate)
+
+   ---
+   **⛔ HARD GATE — Tests Must Pass**
+   The engineer must have all tests passing and quality gate clean before QA review begins.
+   If tests fail, the engineer fixes them. Do NOT send broken code to QA.
+   ---
+
 7. **qa-reviewer** two-stage review: spec compliance first, then code quality
 
 This pipeline is a default, not a mandate. Skip or reorder stages based on context:
 - Bug fix? Skip spec-writer, start with researcher + engineer.
 - Already have a spec? Start at plan-writer.
 - Small change? Maybe just engineer + qa-reviewer.
+
+**The gates still apply even when you skip stages.** If you skip straight to engineer, the engineer still needs passing tests before QA. If you start at plan-writer, the plan still needs approval before engineering.
 
 ## Phase 6: Cleanup (No Tech Debt)
 
@@ -172,5 +211,4 @@ model: opus
 - Auto-trigger (user invokes explicitly)
 - Push to main (always feature branches + PRs)
 - Merge without user sign-off
-- Prescribe rigid stage gates (you use judgment as lead)
 - Loop forever (escalate to user when stuck)
