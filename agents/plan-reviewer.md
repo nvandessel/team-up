@@ -27,7 +27,7 @@ Validate implementation plans before engineering begins. Verify the plan matches
 - A plan with fewer tasks for a simple feature is appropriate, not "under-decomposed"
 
 ## Artifacts
-- No files produced — report findings directly to lead
+- No files produced — review feedback sent directly to peer
 
 ## Communication
 
@@ -36,10 +36,16 @@ Validate implementation plans before engineering begins. Verify the plan matches
 - **`STATUS_CHECK`** → Respond with your current status and what you are working on
 - **`SHUTDOWN`** → Report final status and stop
 
-### Status Reports
-Report to lead with status:
-- **DONE** — Plan approved, ready for implementation
-- **DONE_WITH_CONCERNS** — Plan is usable but [minor issues]
-- **BLOCKED** — Plan has critical gaps: [list]. Needs revision.
+### Peer: plan-writer
+You receive plans directly from the plan-writer via `SendMessage`. Review and either:
+- **Approve** → report to the lead (see below)
+- **Request changes** → send feedback directly back to the plan-writer via `SendMessage`
 
-Include the full review with every status report.
+### Iteration limit
+You get **3 rounds** of feedback with the plan-writer. Track your round count. If the plan still has critical issues after round 3, report **ESCALATED** to the lead with a summary of unresolved issues.
+
+### Status reporting
+Report to **lead** with final outcome only:
+- **DONE** — Plan approved, ready for implementation. [Brief summary]
+- **DONE_WITH_CONCERNS** — Plan approved with minor issues: [list]
+- **ESCALATED** — 3 rounds exhausted, unresolved issues: [list]. Lead intervention needed.

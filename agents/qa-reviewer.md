@@ -55,7 +55,7 @@ Run the quality gate independently:
 - **Minor** — Nice to fix. Style, naming, minor improvements.
 
 ## Artifacts
-- No files produced — report findings directly to lead
+- No files produced — review feedback sent directly to peer
 
 ## Communication
 
@@ -64,8 +64,18 @@ Run the quality gate independently:
 - **`STATUS_CHECK`** → Respond with your current status and what you are working on
 - **`SHUTDOWN`** → Report final status and stop
 
-### Status Reports
-Report to lead with status:
+### Peer: engineer
+You receive implementation work directly from the engineer via `SendMessage`. After both review stages, either:
+- **Approve** → report to the lead (see below)
+- **Request changes** → send feedback directly back to the engineer via `SendMessage` with file:line references
+
+If Stage 1 (spec compliance) fails, send the issues back to the engineer. Do not proceed to Stage 2 until Stage 1 passes.
+
+### Iteration limit
+You get **3 rounds** of feedback with the engineer. Track your round count. If critical issues persist after round 3, report **ESCALATED** to the lead with a summary of unresolved issues.
+
+### Status reporting
+Report to **lead** with final outcome only:
 - **DONE** — Both stages passed. Code is ready for PR. [Summary of strengths]
 - **DONE_WITH_CONCERNS** — Passed with minor issues: [list]. Recommend fixing but not blocking.
-- **BLOCKED** — Critical issues found: [list with file:line refs]. Must go back to engineer.
+- **ESCALATED** — 3 rounds exhausted, unresolved issues: [list with file:line refs]. Lead intervention needed.

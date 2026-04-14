@@ -61,7 +61,6 @@ Present the team composition to the user:
 
 - Delegate work via `SendMessage` to named teammates
 - Track progress via `TaskList` / `TaskGet`
-- Handle handoffs: when one agent finishes, feed its output to the next
 - Unblock agents: if someone reports BLOCKED or NEEDS_CONTEXT, provide what they need or escalate to the user
 
 **Parallel vs. Sequential Dispatch:**
@@ -77,6 +76,34 @@ Run agents **sequentially** when one depends on another's output:
 - Engineer → qa-reviewer (reviewer needs the code)
 
 **Rule of thumb:** If agent B needs to read agent A's output, they run sequentially. If they work on independent inputs, run them in parallel. When in doubt, sequential is safer — parallel with hidden dependencies causes rework.
+
+### Peer-to-Peer Handoffs
+
+Agents that naturally work in pairs communicate directly — the lead doesn't relay intermediate drafts.
+
+**Peer pairs:**
+| Writer/Builder | Reviewer | Flow |
+|---|---|---|
+| spec-writer | spec-reviewer | Writer sends draft → reviewer sends feedback or approves |
+| plan-writer | plan-reviewer | Writer sends draft → reviewer sends feedback or approves |
+| engineer | qa-reviewer | Engineer reports ready → QA reviews and sends feedback or approves |
+
+**How it works:**
+1. When spawning peer pairs, tell each agent its peer's name in the spawn prompt (e.g., "your peer reviewer is `spec-reviewer`")
+2. The writer/builder sends its output directly to its peer reviewer via `SendMessage`
+3. The reviewer either **approves** (sends final status to lead) or **sends feedback** directly back to the writer
+4. They iterate until the reviewer approves — the lead is not involved in intermediate rounds
+
+**Iteration limits:**
+- Peer pairs get **3 rounds** of feedback before escalating to the lead
+- A "round" is one feedback + revision cycle
+- If round 3 doesn't resolve it, the reviewer reports ESCALATED to the lead with a summary of what's still unresolved
+- The lead then decides: provide guidance, adjust the spec/plan, or involve the user
+
+**Lead oversight:**
+- Lead gets notified of **final outcomes only**: approved, approved with concerns, or escalated
+- Lead can still send messages to any agent at any time to intervene
+- Agents report BLOCKED or NEEDS_CONTEXT directly to the lead (not to their peer)
 
 **Health monitoring:**
 - Track which agents are expected to be active vs. idle at any given point
@@ -97,9 +124,10 @@ Run agents **sequentially** when one depends on another's output:
   4. **Do not retry silently more than once.** If the same role fails to start twice, escalate — the problem is likely environmental, not transient
 
 **Researcher on-call:**
-- Any agent uncertain about an API, pattern, or library version should request the researcher
+- Any agent uncertain about an API, pattern, or library version should request the researcher via `SendMessage`
 - The researcher validates approaches against current docs/APIs before implementation proceeds
 - Spawn the researcher into the team on demand — it doesn't need to run for the full lifecycle
+
 
 ## Phase 5: Workflows
 
@@ -117,8 +145,8 @@ The lead's job is to forward review feedback to the engineer and track iteration
 
 Default flow when the user provides a task with no existing spec:
 
-1. **spec-writer** produces a spec → drops in the artifacts directory
-2. **spec-reviewer** validates the spec (completeness, consistency, clarity, scope)
+1. **spec-writer** produces a spec → sends directly to **spec-reviewer**
+2. **spec-writer ↔ spec-reviewer** iterate (up to 3 rounds) → reviewer reports final status to lead
 
    ---
    **⛔ HARD GATE — Spec Approval Required**
@@ -127,8 +155,8 @@ Default flow when the user provides a task with no existing spec:
    Do NOT proceed to planning with an unapproved spec.
    ---
 
-3. **plan-writer** produces an implementation plan → drops in the artifacts directory
-4. **plan-reviewer** validates the plan (matches spec, tasks decomposed, buildable)
+3. **plan-writer** produces an implementation plan → sends directly to **plan-reviewer**
+4. **plan-writer ↔ plan-reviewer** iterate (up to 3 rounds) → reviewer reports final status to lead
 
    ---
    **⛔ HARD GATE — Plan Approval Required**
@@ -138,7 +166,7 @@ Default flow when the user provides a task with no existing spec:
    ---
 
 5. **researcher** validates API usage, library versions, patterns are current
-6. **engineer** implements (feature branch, TDD, quality gate)
+6. **engineer** implements (feature branch, TDD, quality gate) → sends directly to **qa-reviewer**
 
    ---
    **⛔ HARD GATE — Tests Must Pass**
@@ -146,7 +174,7 @@ Default flow when the user provides a task with no existing spec:
    If tests fail, the engineer fixes them. Do NOT send broken code to QA.
    ---
 
-7. **qa-reviewer** two-stage review: spec compliance first, then code quality
+7. **engineer ↔ qa-reviewer** iterate (up to 3 rounds) → reviewer reports final status to lead
 
 This pipeline is a default, not a mandate. Skip or reorder stages based on context:
 - Bug fix? Skip spec-writer, start with researcher + engineer.
@@ -235,7 +263,10 @@ model: opus
 - When you receive a `READY_CHECK` message, respond immediately with `READY`
 - When you receive a `STATUS_CHECK` message, respond with your current status and what you are working on
 - When you receive a `SHUTDOWN` message, report your final status and stop
-- Report status to lead using: DONE, DONE_WITH_CONCERNS, BLOCKED, NEEDS_CONTEXT
+- Report status to lead using: DONE, DONE_WITH_CONCERNS, BLOCKED, NEEDS_CONTEXT, ESCALATED
+- If you have a peer, send drafts/feedback directly via SendMessage — don't route through lead
+- Report final outcomes (approved or escalated) to lead
+- Max 3 feedback rounds with a peer before reporting ESCALATED to lead
 - Include a brief summary with every status report
 
 ## Quality Standards

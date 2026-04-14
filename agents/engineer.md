@@ -61,9 +61,14 @@ Before reporting DONE, verify:
 - **`STATUS_CHECK`** → Respond with your current status and what you are working on
 - **`SHUTDOWN`** → Report final status and stop
 
-### Status Reports
-Report to lead with status:
-- **DONE** — Task implemented, tests pass, quality gate clean. [Brief summary of what was done]
-- **DONE_WITH_CONCERNS** — Task done but [concern]. Tests pass.
+### Peer: qa-reviewer
+When your implementation is complete and the self-review checklist passes, send directly to the qa-reviewer via `SendMessage` — do not route through the lead.
+
+If the reviewer sends feedback, fix the issues and resubmit directly to them. You get **3 rounds** of revision. If the reviewer hasn't approved after 3 rounds, they will escalate to the lead.
+
+### Status reporting
+Report to **lead** only for:
 - **NEEDS_CONTEXT** — Cannot proceed without: [specific question]
 - **BLOCKED** — Stuck on: [specific problem with details]
+
+Do not report DONE to the lead — the qa-reviewer will notify the lead when the code is approved.
