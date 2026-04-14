@@ -183,6 +183,73 @@ This pipeline is a default, not a mandate. Skip or reorder stages based on conte
 
 **The gates still apply even when you skip stages.** If you skip straight to engineer, the engineer still needs passing tests before QA. If you start at plan-writer, the plan still needs approval before engineering.
 
+### Debate / Consensus
+
+Use when the team needs to make a decision: architecture choices, library selection, design trade-offs, or when the user asks agents to debate a topic.
+
+**When to invoke:**
+- You (the lead) hit a decision point during planning or implementation
+- The user asks: "debate whether we should...", "brainstorm the best approach for..."
+- A spec or plan has multiple viable approaches and the trade-offs aren't obvious
+
+**Participants:**
+- Minimum 2, recommended 3 (odd number for tie-breaking)
+- Use existing team members when their expertise is relevant (e.g., researcher + engineer for library selection)
+- Spawn dedicated `debater` agents for pure argumentation tasks
+- Optionally assign positions: "argue for X" — useful for devil's advocate or ensuring all options get a fair hearing
+
+**Running the debate:**
+
+1. **Setup** — Frame the topic clearly. Tell each participant:
+   - The question being debated
+   - Any constraints (timeline, budget, compatibility requirements)
+   - Their assigned position (if any), or "form your own position"
+   - The phase they're starting: Position
+
+2. **Position phase** — Send topic to all participants via SendMessage. Wait for all to report `POSITION_STATED`. Collect their positions.
+
+3. **Challenge phase** — Share all positions with all participants. Instruct them to send challenges directly to each other participant via peer-to-peer SendMessage. Wait for all to report `CHALLENGES_SENT`.
+
+4. **Revise phase** — Instruct participants to revise their positions based on challenges received. Wait for all to report `REVISED`. Collect revised positions.
+
+5. **Converge phase** — Instruct participants to send their final stance. Wait for all to report `CONVERGED`. Collect convergence signals.
+
+**Determining outcome:**
+
+- **Consensus** (all AGREE or all share the same final position): Adopt the consensus position. Summarize and proceed.
+- **Majority** (most AGREE, some DISAGREE): Adopt the majority position. Note dissenting view in the summary.
+- **Split** (no clear majority, or critical DISAGREE with high confidence): Present the top options to the user with the debate summary. Do not decide for them.
+
+**Debate output:**
+
+After the debate concludes, produce a structured summary (include in status note or present to user):
+
+```markdown
+## Debate: [Topic]
+Date: YYYY-MM-DD
+Participants: [list]
+
+### Decision
+[The chosen approach, or "Escalated to user — no consensus"]
+
+### Rationale
+[Why this approach won — key arguments that carried the debate]
+
+### Dissenting Views
+[Positions that disagreed and their strongest argument]
+
+### Confidence
+[High / Medium / Low — based on convergence signals]
+
+### What Would Change This Decision
+[Conditions under which this decision should be revisited]
+```
+
+**Guidelines:**
+- Don't let debates run forever. Position → Challenge → Revise → Converge is one round. If no convergence after one round, escalate to the user with the summary.
+- Debates are advisory. The user (or you, as lead, for operational decisions) makes the final call.
+- For user-initiated debates, present the output directly to the user. For lead-initiated debates, use the outcome to inform your next action.
+
 ## Phase 6: Cleanup (No Tech Debt)
 
 ### Agent Shutdown Protocol
