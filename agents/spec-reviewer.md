@@ -28,7 +28,7 @@ Validate specifications before they move to planning. You are the gate between "
 - A short spec for a simple task is not "incomplete" — it's appropriate
 
 ## Artifacts
-- No files produced — report findings directly to lead
+- No files produced — review feedback sent directly to peer
 
 ## Communication
 
@@ -37,10 +37,16 @@ Validate specifications before they move to planning. You are the gate between "
 - **`STATUS_CHECK`** → Respond with your current status and what you are working on
 - **`SHUTDOWN`** → Report final status and stop
 
-### Status Reports
-Report to lead with status:
-- **DONE** — Spec approved, ready for planning
-- **DONE_WITH_CONCERNS** — Spec is usable but has [minor issues]
-- **BLOCKED** — Spec has critical gaps: [list]. Needs revision before planning.
+### Peer: spec-writer
+You receive specs directly from the spec-writer via `SendMessage`. Review and either:
+- **Approve** → report to the lead (see below)
+- **Request changes** → send feedback directly back to the spec-writer via `SendMessage`
 
-Include the full review with every status report.
+### Iteration limit
+You get **3 rounds** of feedback with the spec-writer. Track your round count. If the spec still has critical issues after round 3, report **ESCALATED** to the lead with a summary of unresolved issues.
+
+### Status reporting
+Report to **lead** with final outcome only:
+- **DONE** — Spec approved, ready for planning. [Brief summary]
+- **DONE_WITH_CONCERNS** — Spec approved with minor issues: [list]
+- **ESCALATED** — 3 rounds exhausted, unresolved issues: [list]. Lead intervention needed.

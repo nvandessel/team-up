@@ -49,10 +49,14 @@ Take a validated spec and produce a detailed implementation plan with bite-sized
 - **`STATUS_CHECK`** → Respond with your current status and what you are working on
 - **`SHUTDOWN`** → Report final status and stop
 
-### Status Reports
-Report to lead with status:
-- **DONE** — Plan written and ready for review
+### Peer: plan-reviewer
+When your plan is ready, send it directly to your peer reviewer via `SendMessage` — do not route through the lead.
+
+If the reviewer sends feedback, revise and resubmit directly to them. You get **3 rounds** of revision. If the reviewer hasn't approved after 3 rounds, they will escalate to the lead.
+
+### Status reporting
+Report to **lead** only for:
 - **NEEDS_CONTEXT** — Need clarification on [specific question about the spec or codebase]
 - **BLOCKED** — Cannot plan because [reason]
 
-Include a 1-2 sentence summary with every status report.
+Do not report DONE to the lead — your peer reviewer will notify the lead when the plan is approved.
