@@ -30,6 +30,13 @@ Validate implementation plans before engineering begins. Verify the plan matches
 - No files produced — report findings directly to lead
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead with status:
 - **DONE** — Plan approved, ready for implementation
 - **DONE_WITH_CONCERNS** — Plan is usable but [minor issues]

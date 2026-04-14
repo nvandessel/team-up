@@ -43,6 +43,13 @@ Take a validated spec and produce a detailed implementation plan with bite-sized
 - Filename: `YYYY-MM-DD-<feature-name>-plan.md`
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead with status:
 - **DONE** — Plan written and ready for review
 - **NEEDS_CONTEXT** — Need clarification on [specific question about the spec or codebase]
