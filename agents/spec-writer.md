@@ -30,6 +30,13 @@ Take a problem, idea, or user request and produce a concise, complete specificat
 - Filename: `YYYY-MM-DD-<topic>.md`
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead with status:
 - **DONE** — Spec written and ready for review
 - **NEEDS_CONTEXT** — Need clarification on [specific question]

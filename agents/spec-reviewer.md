@@ -31,6 +31,13 @@ Validate specifications before they move to planning. You are the gate between "
 - No files produced — report findings directly to lead
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead with status:
 - **DONE** — Spec approved, ready for planning
 - **DONE_WITH_CONCERNS** — Spec is usable but has [minor issues]

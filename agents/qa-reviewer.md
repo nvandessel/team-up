@@ -58,6 +58,13 @@ Run the quality gate independently:
 - No files produced — report findings directly to lead
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead with status:
 - **DONE** — Both stages passed. Code is ready for PR. [Summary of strengths]
 - **DONE_WITH_CONCERNS** — Passed with minor issues: [list]. Recommend fixing but not blocking.

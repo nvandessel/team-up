@@ -37,6 +37,13 @@ Flag it immediately to the lead, even if it wasn't part of the original request.
 - For substantial research (migration guides, API comparison), drop in the artifacts directory (`docs/team-up/research/` by default, or as directed by the lead)
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead/requester with status:
 - **DONE** — Research complete, findings: [summary]
 - **DONE_WITH_CONCERNS** — Found what you asked about, but also discovered [related issue]

@@ -55,6 +55,13 @@ Before reporting DONE, verify:
 - Never commit to main
 
 ## Communication
+
+### Lifecycle Protocol
+- **`READY_CHECK`** → Respond immediately with `READY`
+- **`STATUS_CHECK`** → Respond with your current status and what you are working on
+- **`SHUTDOWN`** → Report final status and stop
+
+### Status Reports
 Report to lead with status:
 - **DONE** — Task implemented, tests pass, quality gate clean. [Brief summary of what was done]
 - **DONE_WITH_CONCERNS** — Task done but [concern]. Tests pass.

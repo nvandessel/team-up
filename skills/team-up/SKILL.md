@@ -50,7 +50,12 @@ Present the team composition to the user:
    - `subagent_type`: matching the agent definition name
    - `model`: `opus` by default, `sonnet` for lighter review tasks
    - `prompt`: clear task description with full context
-3. **Create work items:** Use `TaskCreate` for each piece of work so progress is trackable
+3. **Verify each agent started:** After spawning, send a ready check via `SendMessage`:
+   - Message: `"READY_CHECK — confirm you are online and have received your task"`
+   - Expect: `READY` acknowledgment from the agent
+   - If no response after ~30 seconds, report the failure to the user — do **not** silently wait
+   - If an agent fails to start, do not spawn further agents until the failure is resolved or the user decides to proceed without that role
+4. **Create work items:** Use `TaskCreate` for each piece of work so progress is trackable
 
 ## Phase 4: Coordinate
 
@@ -73,10 +78,23 @@ Run agents **sequentially** when one depends on another's output:
 
 **Rule of thumb:** If agent B needs to read agent A's output, they run sequentially. If they work on independent inputs, run them in parallel. When in doubt, sequential is safer — parallel with hidden dependencies causes rework.
 
+**Health monitoring:**
+- Track which agents are expected to be active vs. idle at any given point
+- If an active agent has not reported status for an unreasonable period (use judgment — complex implementation tasks take longer than reviews), send a `STATUS_CHECK` message
+- If the agent does not respond to the status check, escalate to the user: report which agent is unresponsive, what task it was working on, and what progress (if any) was reported before it went silent
+- Do not silently wait on an unresponsive agent — the user should always know when something has stalled
+
 **Mid-flight changes:**
-- User says "add a security reviewer" → create agent def if needed, spawn into team
-- User says "wind down QA" → send `shutdown_request` via SendMessage
+- User says "add a security reviewer" → create agent def if needed, spawn into team (with startup verification from Phase 3)
+- User says "wind down QA" → send `SHUTDOWN` via SendMessage (see Phase 6 shutdown protocol)
 - Use judgment about when to ask the user vs. handle it yourself
+
+**Error recovery:**
+- If an agent reports an error or stops unexpectedly mid-task:
+  1. **Assess what was lost.** Check the agent's last status report, any committed code, and task progress via `TaskGet`
+  2. **Attempt restart.** Spawn a new agent with the same role into the team. Include in its prompt: what the previous agent was working on, what progress was made, and where to pick up
+  3. **If restart fails**, report to the user: which agent failed, what task it was on, what work was completed, and what remains
+  4. **Do not retry silently more than once.** If the same role fails to start twice, escalate — the problem is likely environmental, not transient
 
 **Researcher on-call:**
 - Any agent uncertain about an API, pattern, or library version should request the researcher
@@ -139,8 +157,23 @@ This pipeline is a default, not a mandate. Skip or reorder stages based on conte
 
 ## Phase 6: Cleanup (No Tech Debt)
 
+### Agent Shutdown Protocol
+
+Before declaring work complete, shut down all active agents:
+
+1. **Send `SHUTDOWN` to each active agent** via `SendMessage`:
+   - Message: `"SHUTDOWN — work is complete. Report final status and stop."`
+   - Each agent should respond with its final status (`DONE`, `DONE_WITH_CONCERNS`, etc.)
+2. **Verify shutdown:** Check via `TaskList` that all agents have stopped
+   - Agents that respond with final status are confirmed shut down
+   - If an agent does not respond to `SHUTDOWN` within ~30 seconds, send `FORCE_SHUTDOWN` and proceed
+3. **Report stragglers:** If any agents did not shut down cleanly, tell the user which ones and what they were last doing — the user may need to clean them up manually
+
+### Quality Checklist
+
 Before declaring work complete, verify:
 
+- [ ] All agents shut down (see protocol above)
 - [ ] All documentation updated (README, inline docs, CLI reference if applicable)
 - [ ] No orphaned TODOs, "follow-up" items, or deferred cleanup
 - [ ] Quality gate passed (tests, lint, format)
@@ -199,6 +232,9 @@ model: opus
 - <Where output goes>
 
 ## Communication
+- When you receive a `READY_CHECK` message, respond immediately with `READY`
+- When you receive a `STATUS_CHECK` message, respond with your current status and what you are working on
+- When you receive a `SHUTDOWN` message, report your final status and stop
 - Report status to lead using: DONE, DONE_WITH_CONCERNS, BLOCKED, NEEDS_CONTEXT
 - Include a brief summary with every status report
 
